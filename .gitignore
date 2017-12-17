@@ -79,3 +79,5 @@ __MACOSX
 /lib/liblcf/
 liblcf.pc
 .buildconfig
+
+/builds/vs2015/*
