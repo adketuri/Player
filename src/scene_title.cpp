@@ -198,7 +198,6 @@ void Scene_Title::CommandContinue() {
 		Game_System::SePlay(Game_System::GetSystemSE(Game_System::SFX_Buzzer));
 		return;
 	}
-
 	Scene::Push(std::make_shared<Scene_Load>());
 }
 

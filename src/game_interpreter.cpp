@@ -50,6 +50,7 @@
 #include "game_battle.h"
 #include "utils.h"
 
+
 namespace {
 	constexpr int max_var_size_2k3 = 9999999;
 	constexpr int min_var_size_2k3 = -max_var_size_2k3;
@@ -1469,6 +1470,19 @@ bool Game_Interpreter::CommandPlaySound(RPG::EventCommand const& com) { // code 
 }
 
 bool Game_Interpreter::CommandEndEventProcessing(RPG::EventCommand const& /* com */) { // code 12310
+	// this gives us auto-enter patch functionality
+	if (Game_Variables[3350] == 2) {
+		// end
+		Graphics::Transition(Graphics::TransitionFadeOut, 32, true);
+		Scene::Pop();
+		Player::exit_flag = true;
+		return false;
+	} else if (Game_Variables[3350] == 1) {
+		// continue 
+		Game_Temp::load_calling = true;
+		SetContinuation(&Game_Interpreter::DefaultContinuation);
+		return false;
+	}
 	index = list.size();
 	return true;
 }

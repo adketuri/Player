@@ -391,7 +391,7 @@ void Player::ParseCommandLine(int argc, char *argv[]) {
 	reset_flag = false;
 	battle_test_flag = false;
 	battle_test_troop_id = 0;
-	new_game_flag = false;
+	new_game_flag = true;
 	load_game_id = -1;
 	party_x_position = -1;
 	party_y_position = -1;
