@@ -79,15 +79,28 @@ void Scene_Battle_Rpg2k3::Update() {
 	for (std::vector<FloatText>::iterator it = floating_texts.begin();
 		it != floating_texts.end();) {
 		int &time = (*it).remaining_time;
-
-		if (time % 2 == 0) {
-			int modifier = time <= 10 ? 1 :
-						   time < 20 ? 0 :
-						   -1;
-			(*it).sprite->SetY((*it).sprite->GetY() + modifier);
+		int &x_vel = (*it).x_vel;
+		int &y_vel = (*it).y_vel;
+		if (it->bounces > 0) {
+			it->y_vel++;
+			if (it->sprite->GetY() > it->start_y) {
+				it->y_vel = it->y_vel * -1;
+				it->y_vel += 3;
+				it->sprite->SetY(it->start_y);
+				it->bounces--;
+			}
+			else {
+				(*it).sprite->SetY((*it).sprite->GetY() + y_vel);
+			}
+			if (time % 3 != 0) {
+				(*it).sprite->SetX((*it).sprite->GetX() + x_vel);
+			}
 		}
-
 		--time;
+		if (time <= 20) {
+			(*it).sprite->SetOpacity(time * 12);
+
+		}
 		if (time <= 0) {
 			it = floating_texts.erase(it);
 		}
@@ -241,7 +254,9 @@ void Scene_Battle_Rpg2k3::DrawFloatText(int x, int y, int color, const std::stri
 
 	FloatText float_text;
 	float_text.sprite = floating_text;
-
+	float_text.start_x = x;
+	float_text.start_y = y + 5;
+	float_text.x_vel = x < 160 ? -1 : 1;
 	floating_texts.push_back(float_text);
 }
 

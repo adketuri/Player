@@ -74,7 +74,12 @@ protected:
 
 	struct FloatText {
 		std::shared_ptr<Sprite> sprite;
-		int remaining_time = 30;
+		int remaining_time = 60;
+		int x_vel = 0;
+		int bounces = 4;
+		int y_vel = -7;
+		int start_x = 0;
+		int start_y = 0;
 	};
 
 	std::vector<FloatText> floating_texts;
