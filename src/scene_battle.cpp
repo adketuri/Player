@@ -36,6 +36,7 @@
 #include "scene_battle.h"
 #include "scene_battle_rpg2k.h"
 #include "scene_battle_rpg2k3.h"
+#include "scene_battle_umbra.h"
 #include "scene_gameover.h"
 
 Scene_Battle::Scene_Battle() :
@@ -349,6 +350,8 @@ void Scene_Battle::AssignSkill(const RPG::Skill* skill) {
 
 std::shared_ptr<Scene_Battle> Scene_Battle::Create()
 {
+	//FIXME :)))
+	return std::make_shared<Scene_Battle_Umbra>();
 	if (Player::IsRPG2k()) {
 		return std::make_shared<Scene_Battle_Rpg2k>();
 	}
