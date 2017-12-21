@@ -506,6 +506,7 @@
     <ClCompile Include="..\..\src\scene_actortarget.cpp" />
     <ClCompile Include="..\..\src\scene_battle.cpp" />
     <ClCompile Include="..\..\src\scene_battle_rpg2k.cpp" />
+    <ClCompile Include="..\..\src\scene_battle_umbra.cpp" />
     <ClCompile Include="..\..\src\scene_debug.cpp" />
     <ClCompile Include="..\..\src\scene_battle_rpg2k3.cpp" />
     <ClCompile Include="..\..\src\scene_end.cpp" />
@@ -673,6 +674,7 @@
     <ClInclude Include="..\..\src\scene.h" />
     <ClInclude Include="..\..\src\scene_actortarget.h" />
     <ClInclude Include="..\..\src\scene_battle.h" />
+    <ClInclude Include="..\..\src\scene_battle_umbra.h" />
     <ClInclude Include="..\..\src\scene_debug.h" />
     <ClInclude Include="..\..\src\scene_battle_rpg2k.h" />
     <ClInclude Include="..\..\src\scene_battle_rpg2k3.h" />

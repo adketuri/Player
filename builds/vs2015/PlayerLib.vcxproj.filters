@@ -521,6 +521,9 @@
     <ClCompile Include="..\..\src\decoder_xmp.cpp">
       <Filter>Source Files\Backend\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\scene_battle_umbra.cpp">
+      <Filter>Source Files\Engine\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\audio.h">
@@ -1020,6 +1023,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\decoder_xmp.h">
       <Filter>Source Files\Backend\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\scene_battle_umbra.h">
+      <Filter>Source Files\Engine\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
