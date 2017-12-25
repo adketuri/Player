@@ -150,6 +150,7 @@ namespace {
 		int min_height, max_height;
 		std::function<BitmapRef()> dummy_renderer;
 	} const spec[] = {
+		//FIXME System2 should have a sensible max for SU
 		/* FIXME: 240px max height is 2k3 specific, for 2k is 160px */
 		{ "Backdrop", false, 320, 320, 160, 240, backdrop_dummy_func},
 		{ "Battle", true, 480, 480, 96, 480, battle_dummy_func },
@@ -162,7 +163,7 @@ namespace {
 		{ "Picture", true, 1, 640, 1, 480, picture_dummy_func },
 		{ "System", true, 160, 160, 80, 80, &DummySystem },
 		{ "Title", false, 320, 320, 240, 240, title_dummy_func },
-		{ "System2", true, 80, 80, 96, 96, system2_dummy_func },
+		{ "System2", true, 80, 800, 96, 960, system2_dummy_func },
 		{ "Battle2", true, 640, 640, 640, 640, battle2_dummy_func },
 		{ "BattleCharSet", true, 144, 144, 384, 384, battlecharset_dummy_func },
 		{ "BattleWeapon", true, 192, 192, 512, 512, battleweapon_dummy_func },

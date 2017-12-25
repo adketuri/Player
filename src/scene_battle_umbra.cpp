@@ -45,6 +45,7 @@ Scene_Battle_Umbra::~Scene_Battle_Umbra() {
 
 void Scene_Battle_Umbra::Update() {
 	switch (state) {
+	case State_Battle:
 	case State_SelectActor:
 	case State_AutoBattle: {
 		if (battle_actions.empty()) {
@@ -125,6 +126,20 @@ void Scene_Battle_Umbra::OnSystem2Ready(FileRequestResult* result) {
 	enemy_cursor->SetBitmap(system2);
 	enemy_cursor->SetZ(Priority_Window);
 	enemy_cursor->SetVisible(false);
+
+	enemy_grid->SetBitmap(system2);
+	enemy_grid->SetZ(Priority_TilesetBelow);
+	enemy_grid->SetVisible(true);
+	enemy_grid->SetX(50);
+	enemy_grid->SetY(80);
+	enemy_grid->SetSrcRect(Rect(80, 0, 80, 64));
+
+	ally_grid->SetBitmap(system2);
+	ally_grid->SetZ(Priority_TilesetBelow);
+	ally_grid->SetVisible(true);
+	ally_grid->SetX(150);
+	ally_grid->SetY(80);
+	ally_grid->SetSrcRect(Rect(80, 0, 80, 64));
 }
 
 void Scene_Battle_Umbra::CreateUi() {
@@ -133,14 +148,13 @@ void Scene_Battle_Umbra::CreateUi() {
 	CreateBattleTargetWindow();
 	CreateBattleCommandWindow();
 
-	// No escape. FIXME: Only enabled when party has initiative.
-	options_window->DisableItem(2);
-
 	enemy_status_window.reset(new Window_BattleStatus(0, 0, SCREEN_TARGET_WIDTH - 76, 80, true));
 	enemy_status_window->SetVisible(false);
 
 	ally_cursor.reset(new Sprite());
 	enemy_cursor.reset(new Sprite());
+	ally_grid.reset(new Sprite());
+	enemy_grid.reset(new Sprite());
 
 	if (Data::battlecommands.battle_type == RPG::BattleCommands::BattleType_gauge) {
 		item_window->SetY(64);
@@ -338,11 +352,11 @@ void Scene_Battle_Umbra::RefreshCommandWindow() {
 
 void Scene_Battle_Umbra::SetState(Scene_Battle::State new_state) {
 	previous_state = state;
+	Output::Debug("Change State: %d -> %d", previous_state, new_state);
 	state = new_state;
 	if (state == State_SelectActor && auto_battle)
 		state = State_AutoBattle;
 
-	options_window->SetActive(false);
 	status_window->SetActive(false);
 	command_window->SetActive(false);
 	item_window->SetActive(false);
@@ -358,9 +372,6 @@ void Scene_Battle_Umbra::SetState(Scene_Battle::State new_state) {
 				flag.fatigue;
 
 		});
-		break;
-	case State_SelectOption:
-		options_window->SetActive(true);
 		break;
 	case State_SelectActor:
 		// no-op
@@ -409,14 +420,6 @@ void Scene_Battle_Umbra::SetState(Scene_Battle::State new_state) {
 
 	switch (state) {
 	case State_Start:
-		break;
-	case State_SelectOption:
-		options_window->SetVisible(true);
-		status_window->SetVisible(true);
-		status_window->SetX(76);
-		status_window->SetIndex(-1);
-		status_window->Refresh();
-		break;
 	case State_AutoBattle:
 	case State_SelectActor:
 		command_window->SetIndex(-1);
@@ -428,6 +431,7 @@ void Scene_Battle_Umbra::SetState(Scene_Battle::State new_state) {
 		}
 		break;
 	case State_SelectCommand:
+	case State_Battle:
 		status_window->SetVisible(true);
 		command_window->SetVisible(true);
 		status_window->SetX(0);
@@ -435,11 +439,9 @@ void Scene_Battle_Umbra::SetState(Scene_Battle::State new_state) {
 	case State_SelectEnemyTarget:
 		status_window->SetVisible(true);
 		target_window->SetActive(true);
-
 		if (Data::battlecommands.battle_type != RPG::BattleCommands::BattleType_gauge) {
 			command_window->SetVisible(true);
 		}
-
 		if (Data::battlecommands.battle_type == RPG::BattleCommands::BattleType_traditional) {
 			target_window->SetVisible(true);
 		}
@@ -448,9 +450,6 @@ void Scene_Battle_Umbra::SetState(Scene_Battle::State new_state) {
 		status_window->SetVisible(true);
 		status_window->SetX(0);
 		command_window->SetVisible(true);
-		break;
-	case State_Battle:
-		// no-op
 		break;
 	case State_SelectItem:
 		item_window->SetVisible(true);
@@ -512,7 +511,7 @@ void Scene_Battle_Umbra::ProcessActions() {
 
 	switch (state) {
 	case State_Start:
-		SetState(State_SelectOption);
+		SetState(State_Battle);
 		break;
 	case State_SelectActor:
 	case State_AutoBattle:
@@ -777,12 +776,6 @@ void Scene_Battle_Umbra::ProcessInput() {
 		case State_Start:
 			// no-op
 			break;
-		case State_SelectOption:
-			// Interpreter message boxes pop up in this state
-			if (!message_window->GetVisible()) {
-				OptionSelected();
-			}
-			break;
 		case State_SelectActor:
 			// no-op
 			break;
@@ -819,16 +812,7 @@ void Scene_Battle_Umbra::ProcessInput() {
 		Game_System::SePlay(Game_System::GetSystemSE(Game_System::SFX_Cancel));
 		switch (state) {
 		case State_Start:
-		case State_SelectOption:
-			// no-op
-			break;
-		case State_SelectActor:
-		case State_AutoBattle:
-			SetState(State_SelectOption);
-			break;
 		case State_SelectCommand:
-			active_actor->SetLastBattleAction(-1);
-			SetState(State_SelectOption);
 			break;
 		case State_SelectEnemyTarget:
 		case State_SelectItem:
@@ -847,26 +831,6 @@ void Scene_Battle_Umbra::ProcessInput() {
 			// no-op
 			break;
 		}
-	}
-}
-
-void Scene_Battle_Umbra::OptionSelected() {
-	switch (options_window->GetIndex()) {
-	case 0: // Battle
-		Game_System::SePlay(Game_System::GetSystemSE(Game_System::SFX_Decision));
-		auto_battle = false;
-		SetState(State_SelectActor);
-		break;
-	case 1: // Auto Battle
-		auto_battle = true;
-		SetState(State_AutoBattle);
-		Game_System::SePlay(Game_System::GetSystemSE(Game_System::SFX_Decision));
-		break;
-	case 2: // Escape
-			// FIXME : Only enabled when party has initiative.
-		Game_System::SePlay(Game_System::GetSystemSE(Game_System::SFX_Buzzer));
-		//SetState(State_Escape);
-		break;
 	}
 }
 

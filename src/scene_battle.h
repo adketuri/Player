@@ -64,31 +64,31 @@ public:
 	void TransitionOut() override;
 
 	enum State {
-		/** Battle has started (Display encounter message) */
+		/** 0: Battle has started (Display encounter message) */
 		State_Start,
-		/** Menu with Battle, Auto Battle and Escape Options */
+		/** 1: Menu with Battle, Auto Battle and Escape Options */
 		State_SelectOption,
-		/** Selects next actor who has to move */
+		/** 2: Selects next actor who has to move */
 		State_SelectActor,
-		/** Auto battle command selected */
+		/** 3: Auto battle command selected */
 		State_AutoBattle,
-		/** Menu with abilities of current Actor (e.g. Command, Item, Skill and Defend) */
+		/** 4: Menu with abilities of current Actor (e.g. Command, Item, Skill and Defend) */
 		State_SelectCommand,
-		/** Item selection is active */
+		/** 5: Item selection is active */
 		State_SelectItem,
-		/** Skill selection menu is active */
+		/** 6: Skill selection menu is active */
 		State_SelectSkill,
-		/** Player selects enemy target */
+		/** 7: Player selects enemy target */
 		State_SelectEnemyTarget,
-		/** Player selects allied target */
+		/** 8: Player selects allied target */
 		State_SelectAllyTarget,
-		/** Battle Running */
+		/** 9: Battle Running */
 		State_Battle,
-		/** Battle ended with a victory */
+		/** 10: Battle ended with a victory */
 		State_Victory,
-		/** Battle ended with a defeat */
+		/** 11: Battle ended with a defeat */
 		State_Defeat,
-		/** Escape command selected */
+		/** 12: Escape command selected */
 		State_Escape
 	};
 

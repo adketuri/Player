@@ -70,7 +70,7 @@ protected:
 
 	void ShowNotification(const std::string& text);
 
-	std::unique_ptr<Sprite> ally_cursor, enemy_cursor;
+	std::unique_ptr<Sprite> ally_cursor, enemy_cursor, ally_grid, enemy_grid;
 
 	struct FloatText {
 		std::shared_ptr<Sprite> sprite;
@@ -80,6 +80,14 @@ protected:
 		int y_vel = -7;
 		int start_x = 0;
 		int start_y = 0;
+	};
+
+	struct Grid {
+		std::shared_ptr<Sprite> sprite;
+		int x;
+		int y;
+		int width = 16 * 4;
+		int height = 16 * 4;
 	};
 
 	std::vector<FloatText> floating_texts;
