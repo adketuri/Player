@@ -63,6 +63,7 @@ void Game_Party::SetupBattleTestMembers() {
 	Clear();
 
 	std::vector<RPG::TestBattler>::const_iterator it;
+	int i = 0;
 	for (it = Data::system.battletest_data.begin();
 		it != Data::system.battletest_data.end(); ++it) {
 		AddActor(it->actor_id);

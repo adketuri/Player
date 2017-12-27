@@ -86,8 +86,6 @@ protected:
 		std::shared_ptr<Sprite> sprite;
 		int x;
 		int y;
-		int width = 16 * 4;
-		int height = 16 * 4;
 	};
 
 	std::vector<FloatText> floating_texts;
@@ -103,6 +101,7 @@ protected:
 	std::vector<Game_Battler*> targets;
 
 	int select_target_flash_count = 0;
+	int grid_x, grid_y;
 
 	FileRequestBinding request_id;
 };

@@ -130,16 +130,16 @@ void Scene_Battle_Umbra::OnSystem2Ready(FileRequestResult* result) {
 	enemy_grid->SetBitmap(system2);
 	enemy_grid->SetZ(Priority_TilesetBelow);
 	enemy_grid->SetVisible(true);
-	enemy_grid->SetX(50);
-	enemy_grid->SetY(80);
-	enemy_grid->SetSrcRect(Rect(80, 0, 80, 64));
+	enemy_grid->SetX(GRID_SIDE - GRID_WIDTH/2);
+	enemy_grid->SetY(GRID_BOTTOM);
+	enemy_grid->SetSrcRect(Rect(80, 0, GRID_WIDTH, GRID_HEIGHT));
 
 	ally_grid->SetBitmap(system2);
 	ally_grid->SetZ(Priority_TilesetBelow);
 	ally_grid->SetVisible(true);
-	ally_grid->SetX(150);
-	ally_grid->SetY(80);
-	ally_grid->SetSrcRect(Rect(80, 0, 80, 64));
+	ally_grid->SetX(SCREEN_TARGET_WIDTH - GRID_SIDE - GRID_WIDTH/2);
+	ally_grid->SetY(GRID_BOTTOM);
+	ally_grid->SetSrcRect(Rect(80, 0, GRID_WIDTH, GRID_HEIGHT));
 }
 
 void Scene_Battle_Umbra::CreateUi() {
@@ -177,6 +177,19 @@ void Scene_Battle_Umbra::CreateUi() {
 	FileRequestAsync* request = AsyncHandler::RequestFile("System2", Data::system.system2_name);
 	request_id = request->Bind(&Scene_Battle_Umbra::OnSystem2Ready, this);
 	request->Start();
+
+	// init grid position
+	std::vector<Game_Battler*> battlers;
+	Main_Data::game_party->GetBattlers(battlers);
+	int x = 0;
+	int y = 0;
+	for (std::vector<Game_Battler*>::const_iterator it = battlers.begin(); it != battlers.end(); ++it) {
+		Output::Debug("Setting grid pos: %d, %d", x, y);
+		(*it)->SetGridPos(x, y);
+		x += 2;
+		y += 2;
+	}
+
 }
 
 void Scene_Battle_Umbra::UpdateCursors() {

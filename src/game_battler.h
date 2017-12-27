@@ -136,6 +136,12 @@ public:
 	 */
 	void ShiftAttributeRate(int attribute_id, int shift);
 
+	int GetGridX() const;
+	
+	int GetGridY() const;
+
+	void SetGridPos(int x, int y);
+
 	/**
 	 * Gets probability that a state can be inflicted on this actor.
 	 *
@@ -602,6 +608,7 @@ protected:
 	int last_battle_action;
 	int battle_combo_command_id;
 	int battle_combo_times;
+	int grid_x, grid_y;
 
 	std::vector<int> attribute_shift;
 };

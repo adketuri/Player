@@ -21,6 +21,7 @@
 #include "game_enemyparty.h"
 #include "main_data.h"
 #include "utils.h"
+#include "output.h"
 
 Game_EnemyParty::Game_EnemyParty() {
 }
@@ -46,10 +47,18 @@ void Game_EnemyParty::Setup(int battle_troop_id) {
 		non_hidden += (!mem.invisible ? 1 : 0);
 	}
 
+	int i = 0;
 	for (const RPG::TroopMember& mem : troop->members) {
 		std::shared_ptr<Game_Enemy> enemy = std::make_shared<Game_Enemy>(mem.enemy_id);
-		enemy->SetBattleX(mem.x);
-		enemy->SetBattleY(mem.y);
+		int col = mem.x * 2.8f / SCREEN_TARGET_WIDTH; // 0 - 2
+		enemy->SetGridPos(col, i);
+		Output::Debug("Monster set to %d, %d", col, i);
+		int x = GRID_SIDE + (col-1)*GRID_WIDTH / GRID_SIZE;
+		int y = GRID_BOTTOM + i*GRID_HEIGHT / GRID_SIZE;
+		Output::Debug("Monster set  (%d, %d)", x, y);
+		enemy->SetBattleX(x);
+		enemy->SetBattleY(y);
+		i++;
 
 		if (!mem.invisible) {
 			if (troop->appear_randomly) {

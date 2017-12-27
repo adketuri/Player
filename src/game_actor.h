@@ -755,6 +755,7 @@ private:
 	void RemoveInvalidEquipment();
 
 	int actor_id;
+
 	std::vector<int> exp_list;
 };
 

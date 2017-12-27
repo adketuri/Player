@@ -29,6 +29,7 @@
 #include "util_macro.h"
 #include "main_data.h"
 #include "utils.h"
+#include "output.h"
 
 Game_Battler::Game_Battler() {
 	ResetBattle();
@@ -732,4 +733,18 @@ void Game_Battler::ShiftAttributeRate(int attribute_id, int shift) {
 	} else if ((old_shift == 1 || old_shift == 0) && shift == -1) {
 		--old_shift;
 	}
+}
+
+int Game_Battler::GetGridX() const {
+	return Game_Battler::grid_x;
+}
+
+int Game_Battler::GetGridY() const {
+	return Game_Battler::grid_y;
+}
+
+void Game_Battler::SetGridPos(int x, int y) {
+	Game_Battler::grid_x = x;
+	Game_Battler::grid_y = y;
+	Output::Debug("Setting grid pos (%d, %d)", grid_x, grid_y);
 }

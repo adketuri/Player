@@ -43,6 +43,21 @@
 /** Run game in zoom mode. */
 #define RUN_ZOOM 1
 
+/** Width of CBS grid */
+#define GRID_WIDTH 96
+
+/** Height of CBS grid*/
+#define GRID_HEIGHT 64
+
+/** Num of rows/cols in the grid */
+#define GRID_SIZE 3
+
+/** The side padding of the battle grid */
+#define GRID_SIDE 80
+
+/** The bottom padding of the battle grid */
+#define GRID_BOTTOM 80
+
 /**
  * Pause the game process when the player window
  * looses its focus.
