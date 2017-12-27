@@ -37,6 +37,7 @@ void Game_Enemy::Setup(int enemy_id) {
 	x = 0;
 	y = 0;
 	hidden = false;
+	SetBattleAnimationId();
 }
 
 const std::vector<int16_t>& Game_Enemy::GetStates() const {
@@ -187,7 +188,22 @@ void Game_Enemy::Transform(int new_enemy_id) {
 }
 
 int Game_Enemy::GetBattleAnimationId() const {
-	return 0;
+	return anim_id;
+}
+
+void Game_Enemy::SetBattleAnimationId()
+{
+	anim_id = 0;
+	for (unsigned int i = 0; i < Data::battleranimations.size(); i++) {
+		if (enemy->name == Data::battleranimations[i].name) {
+			Output::Debug("Found battle animation %d for enemy %d", i, enemy->ID);
+			anim_id = i+1;
+			break;
+		}
+	}
+	if (anim_id == 0) {
+		Output::Warning("No battle animation for enemy %d", enemy->ID);
+	}
 }
 
 int Game_Enemy::GetHitChance() const {

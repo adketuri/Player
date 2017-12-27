@@ -155,6 +155,7 @@ public:
 	int GetHitChance() const override;
 	float GetCriticalHitChance() const override;
 	int GetBattleAnimationId() const override;
+	void SetBattleAnimationId();
 
 	int GetExp() const;
 
@@ -187,6 +188,7 @@ protected:
 	int y;
 
 	int enemy_id;
+	int anim_id;
 	// hidden at battle begin
 	bool hidden;
 	int hp;
