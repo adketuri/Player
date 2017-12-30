@@ -157,7 +157,6 @@ void Sprite_Battler::SetAnimationState(int state, LoopState loop) {
 	if (state == 101) {
 		state = 7;
 	}
-
 	anim_state = state;
 
 	flash_counter = 0;
@@ -165,7 +164,7 @@ void Sprite_Battler::SetAnimationState(int state, LoopState loop) {
 	loop_state = loop;
 
 	cycle = 0;
-
+	Output::Debug("Setting animation state to %d", state);
 	idling = false;
 
 	if (Player::IsRPG2k3()) {

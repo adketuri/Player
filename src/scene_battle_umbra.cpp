@@ -580,12 +580,9 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 	Sprite_Battler* source_sprite;
 	source_sprite = Game_Battle::GetSpriteset().FindBattler(action->GetSource());
 
-	if (source_sprite && !source_sprite->IsIdling()) {
-		return false;
-	}
-
 	switch (battle_action_state) {
 	case BattleActionState_Start:
+		battle_action_timer = 0;
 		if (battle_action_need_event_refresh) {
 			action->GetSource()->NextBattleTurn();
 			NextTurn(action->GetSource());
@@ -623,15 +620,25 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 			}
 		}
 
-		//printf("Action: %s\n", action->GetSource()->GetName().c_str());
+		printf("Action: %s\n", action->GetSource()->GetName().c_str());
+		if (source_sprite) {
+			source_sprite->SetAnimationState(Sprite_Battler::AnimationState_WalkingLeft, Sprite_Battler::LoopState_WaitAfterFinish);
+		}
+		battle_action_state = BattleActionState_Approach;
+		break;
 
+	case BattleActionState_Approach:
+		if (battle_action_timer++ > 20) {
+			battle_action_state = BattleActionState_Execute;
+		}
+		break;
+
+	case BattleActionState_Execute:
 		action->Execute();
 
 		if (source_sprite) {
 			source_sprite->Flash(Color(255, 255, 255, 100), 15);
-			source_sprite->SetAnimationState(
-				action->GetSourceAnimationState(),
-				Sprite_Battler::LoopState_WaitAfterFinish);
+			source_sprite->SetAnimationState(action->GetSourceAnimationState(), Sprite_Battler::LoopState_WaitAfterFinish);
 		}
 
 		action->PlayAnimation();
@@ -659,10 +666,13 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 				Game_System::SePlay(*action->GetStartSe());
 			}
 		}
-
 		battle_action_state = BattleActionState_Result;
 		break;
+		
 	case BattleActionState_Result:
+		if (source_sprite && !source_sprite->IsIdling()) {
+			return false;
+		}
 		if (source_sprite) {
 			source_sprite->SetAnimationLoop(Sprite_Battler::LoopState_DefaultAnimationAfterFinish);
 		}
@@ -710,12 +720,21 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 		if (action->GetResultSe()) {
 			Game_System::SePlay(*action->GetResultSe());
 		}
-
 		battle_action_wait = 30;
-
-		battle_action_state = BattleActionState_Finished;
-
+		battle_action_timer = 0;
+		source_sprite->SetAnimationState(Sprite_Battler::AnimationState_WalkingRight, Sprite_Battler::LoopState_LoopAnimation);
+		battle_action_state = BattleActionState_Return;
 		break;
+
+	case BattleActionState_Return:
+		if (battle_action_timer++ > 20) {
+			battle_action_state = BattleActionState_Finished;
+			if (source_sprite) {
+				source_sprite->SetAnimationState(Sprite_Battler::AnimationState_Idle);
+			}
+		}
+		break;
+
 	case BattleActionState_Finished:
 		if (battle_action_need_event_refresh) {
 			battle_action_wait = 30;

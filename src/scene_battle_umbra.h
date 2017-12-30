@@ -90,6 +90,7 @@ protected:
 
 	std::vector<FloatText> floating_texts;
 
+	int battle_action_timer;
 	int battle_action_wait;
 	int battle_action_state;
 	bool battle_action_need_event_refresh = true;

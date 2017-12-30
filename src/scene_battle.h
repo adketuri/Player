@@ -98,14 +98,26 @@ public:
 		 * Used to execute the algorithm to play an optional battle animation.
 		 */
 		BattleActionState_Start,
+		/** 
+		* Called while the sprite is approaching its target 
+		*/
+		BattleActionState_Approach,
+		/** 
+		* Called to execute the action 
+		*/
+		BattleActionState_Execute,
+		/** 
+		* Called when the animation needs to return to its origin 
+		*/
+		BattleActionState_Return,
 		/**
-		 * Handles healing of conditions that get auto removed after X turns.
-		 */
+		* Handles healing of conditions that get auto removed after X turns.
+		*/
 		BattleActionState_ConditionHeal,
 		/**
-		 * Used to apply the new conditions that were caused.
-		 * Called once for each condition.
-		 */
+		* Used to apply the new conditions that were caused.
+		* Called once for each condition.
+		*/
 		BattleActionState_Result,
 		/**
 		 * Action execution finished (no function is called here)
