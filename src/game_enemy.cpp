@@ -143,22 +143,6 @@ void Game_Enemy::SetSp(int _sp) {
 	sp = std::min(std::max(_sp, 0), GetMaxSp());
 }
 
-int Game_Enemy::GetBattleX() const {
-	return (x*SCREEN_TARGET_WIDTH/320);
-}
-
-int Game_Enemy::GetBattleY() const {
-	return (y*SCREEN_TARGET_HEIGHT/240);
-}
-
-void Game_Enemy::SetBattleX(int new_x) {
-	x = new_x;
-}
-
-void Game_Enemy::SetBattleY(int new_y) {
-	y = new_y;
-}
-
 int Game_Enemy::GetHue() const {
 	return enemy->battler_hue;
 }

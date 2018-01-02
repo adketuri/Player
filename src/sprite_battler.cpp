@@ -146,8 +146,11 @@ void Sprite_Battler::Update() {
 	}
 
 	// needed for screen shaking
-	SetX(battler->GetDisplayX());
-	SetY(battler->GetDisplayY());
+	//SetX(battler->GetBattleX());
+	//SetY(battler->GetBattleY());
+	//TODO AK REMOVE
+	//SetX(100);
+	//SetY(100);
 
 }
 
@@ -259,8 +262,9 @@ void Sprite_Battler::CreateSprite() {
 	sprite_name = battler->GetSpriteName();
 	hue = battler->GetHue();
 
-	SetX(battler->GetDisplayX());
-	SetY(battler->GetDisplayY());
+	Output::Debug("Creating sprite, setting to %d, %d", battler->GetBattleX(), battler->GetBattleY());
+	SetX(battler->GetBattleX());
+	SetY(battler->GetBattleY());
 	// Battlers at the bottom appear above battlers at the top
 	SetZ(Priority_Battler + battler->GetBattleY());
 

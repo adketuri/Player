@@ -53,11 +53,7 @@ void Game_EnemyParty::Setup(int battle_troop_id) {
 		int col = mem.x * 2.8f / SCREEN_TARGET_WIDTH; // 0 - 2
 		enemy->SetGridPos(col, i);
 		Output::Debug("Monster set to %d, %d", col, i);
-		int x = GRID_SIDE + (col-1)*GRID_WIDTH / GRID_SIZE;
-		int y = GRID_BOTTOM + i*GRID_HEIGHT / GRID_SIZE;
-		Output::Debug("Monster set  (%d, %d)", x, y);
-		enemy->SetBattleX(x);
-		enemy->SetBattleY(y);
+		enemy->SetInitialBattleCoordinates(false);
 		i++;
 
 		if (!mem.invisible) {

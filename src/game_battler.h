@@ -142,6 +142,8 @@ public:
 
 	void SetGridPos(int x, int y);
 
+	void SetInitialBattleCoordinates(bool friendly);
+
 	/**
 	 * Gets probability that a state can be inflicted on this actor.
 	 *
@@ -422,14 +424,18 @@ public:
 	 *
 	 * @return X position in battle scene
 	 */
-	virtual int GetBattleX() const = 0;
+	int GetBattleX() const;
 
 	/**
 	 * Gets Y position against the battle background.
 	 *
 	 * @return Y position in battle scene
 	 */
-	virtual int GetBattleY() const = 0;
+	int GetBattleY() const;
+
+	virtual void SetBattleX(int new_x);
+
+	virtual void SetBattleY(int new_y);
 
 	/**
 	 * Gets X position on the screen.
@@ -609,6 +615,7 @@ protected:
 	int battle_combo_command_id;
 	int battle_combo_times;
 	int grid_x, grid_y;
+	int x, y;
 
 	std::vector<int> attribute_shift;
 };

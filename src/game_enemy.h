@@ -112,33 +112,6 @@ public:
 	 */
 	int GetBaseAgi() const override;
 
-	/**
-	 * Gets enemy X position
-	 *
-	 * @return enemy X position
-	 */
-	int GetBattleX() const override;
-	/**
-	 * Gets enemy Y position
-	 *
-	 * @return enemy Y position
-	 */
-	int GetBattleY() const override;
-
-	/**
-	 * Sets enemy X position
-	 * 
-	 * @param new_x New X position
-	 */
-	void SetBattleX(int new_x);
-
-	/**
-	 * Sets enemy Y position
-	 * 
-	 * @param new_y New Y position
-	 */
-	void SetBattleY(int new_y);
-
 	int GetHue() const override;
 
 	int GetHp() const override;
@@ -183,9 +156,6 @@ public:
 
 protected:
 	void Setup(int enemy_id);
-
-	int x;
-	int y;
 
 	int enemy_id;
 	int anim_id;

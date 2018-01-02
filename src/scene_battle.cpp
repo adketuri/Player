@@ -78,7 +78,20 @@ void Scene_Battle::Start() {
 		Main_Data::game_enemyparty.reset(new Game_EnemyParty());
 		Main_Data::game_enemyparty->Setup(Game_Temp::battle_troop_id);
 	}
-
+	//AK do something here
+	// init grid position
+	std::vector<Game_Battler*> battlers;
+	Main_Data::game_party->GetBattlers(battlers);
+	int x = 0;
+	int y = 0;
+	for (std::vector<Game_Battler*>::const_iterator it = battlers.begin(); it != battlers.end(); ++it) {
+		Output::Debug("Setting player grid pos: %d, %d", x, y);
+		(*it)->SetGridPos(x, y);
+		(*it)->SetInitialBattleCoordinates(true);
+		x += 2;
+		y += 2;
+	}
+	// --------------------
 	Game_Battle::Init();
 
 	cycle = 0;

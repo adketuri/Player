@@ -40,8 +40,7 @@ battle_action_state(BattleActionState_Start)
 {
 }
 
-Scene_Battle_Umbra::~Scene_Battle_Umbra() {
-}
+Scene_Battle_Umbra::~Scene_Battle_Umbra() {}
 
 void Scene_Battle_Umbra::Update() {
 	switch (state) {
@@ -177,18 +176,6 @@ void Scene_Battle_Umbra::CreateUi() {
 	FileRequestAsync* request = AsyncHandler::RequestFile("System2", Data::system.system2_name);
 	request_id = request->Bind(&Scene_Battle_Umbra::OnSystem2Ready, this);
 	request->Start();
-
-	// init grid position
-	std::vector<Game_Battler*> battlers;
-	Main_Data::game_party->GetBattlers(battlers);
-	int x = 0;
-	int y = 0;
-	for (std::vector<Game_Battler*>::const_iterator it = battlers.begin(); it != battlers.end(); ++it) {
-		Output::Debug("Setting grid pos: %d, %d", x, y);
-		(*it)->SetGridPos(x, y);
-		x += 2;
-		y += 2;
-	}
 
 }
 
@@ -521,7 +508,6 @@ void Scene_Battle_Umbra::ProcessActions() {
 		if (message_timer <= 0)
 			help_window->SetVisible(false);
 	}
-
 	switch (state) {
 	case State_Start:
 		SetState(State_Battle);
@@ -579,6 +565,7 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 
 	Sprite_Battler* source_sprite;
 	source_sprite = Game_Battle::GetSpriteset().FindBattler(action->GetSource());
+	int max = 20;
 
 	switch (battle_action_state) {
 	case BattleActionState_Start:
@@ -611,7 +598,7 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 				Output::Warning("Battle: BattleAction without valid target.");
 				return true;
 			}
-
+			
 			action->SetTarget(action->GetTarget()->GetParty().GetNextActiveBattler(action->GetTarget()));
 
 			if (!action->IsTargetValid()) {
@@ -619,6 +606,10 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 				return true;
 			}
 		}
+		start_x = action->GetSource()->GetBattleX();
+		start_y = action->GetSource()->GetBattleY();
+		end_x = action->GetTarget()->GetBattleX();
+		end_y = action->GetTarget()->GetBattleY();
 
 		printf("Action: %s\n", action->GetSource()->GetName().c_str());
 		if (source_sprite) {
@@ -628,7 +619,16 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 		break;
 
 	case BattleActionState_Approach:
-		if (battle_action_timer++ > 20) {
+		if (source_sprite) {
+			float percent = (float)battle_action_timer / max;
+			int new_x = start_x + (end_x - start_x) * percent;
+			int new_y = start_y + (end_y - start_y) * percent;
+			Output::Debug("start (%d, %d) end (%d, %d), new (%d, %d), percent %f", start_x, start_y, end_x, end_y, new_x, new_y, percent);
+			action->GetSource()->GetBattleX();
+			source_sprite->SetX(new_x);
+			source_sprite->SetY(new_y);
+		}
+		if (battle_action_timer++ >= max) {
 			battle_action_state = BattleActionState_Execute;
 		}
 		break;
@@ -727,11 +727,16 @@ bool Scene_Battle_Umbra::ProcessBattleAction(Game_BattleAlgorithm::AlgorithmBase
 		break;
 
 	case BattleActionState_Return:
-		if (battle_action_timer++ > 20) {
+		if (source_sprite) {
+			float percent = 1 - (float)battle_action_timer / max;
+			int new_x = start_x + (end_x - start_x) * percent;
+			int new_y = start_y + (end_y - start_y) * percent;
+			action->GetSource()->GetBattleX();
+			source_sprite->SetX(new_x);
+			source_sprite->SetY(new_y);
+		}
+		if (battle_action_timer++ >= max) {
 			battle_action_state = BattleActionState_Finished;
-			if (source_sprite) {
-				source_sprite->SetAnimationState(Sprite_Battler::AnimationState_Idle);
-			}
 		}
 		break;
 

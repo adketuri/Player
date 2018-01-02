@@ -569,6 +569,22 @@ int Game_Battler::GetHue() const {
 	return 0;
 }
 
+int Game_Battler::GetBattleX() const {
+	return x;
+}
+
+int Game_Battler::GetBattleY() const {
+	return y;
+}
+
+void Game_Battler::SetBattleX(int new_x) {
+	x = new_x;
+}
+
+void Game_Battler::SetBattleY(int new_y) {
+	y = new_y;
+}
+
 Game_Party_Base& Game_Battler::GetParty() const {
 	if (GetType() == Type_Ally) {
 		return *Main_Data::game_party;
@@ -747,4 +763,13 @@ void Game_Battler::SetGridPos(int x, int y) {
 	Game_Battler::grid_x = x;
 	Game_Battler::grid_y = y;
 	Output::Debug("Setting grid pos (%d, %d)", grid_x, grid_y);
+}
+
+void Game_Battler::SetInitialBattleCoordinates(bool friendly){
+	int new_x = (friendly ? SCREEN_TARGET_WIDTH - GRID_SIDE : GRID_SIDE) + (Game_Battler::grid_x - 1)*GRID_WIDTH / GRID_SIZE;
+	int new_y = GRID_BOTTOM + Game_Battler::grid_y*GRID_HEIGHT / GRID_SIZE;
+	Output::Debug("Friendly? %s", friendly ? "true" : "false");
+	Output::Debug("Coordinates set to (%d, %d)", new_x, new_y);
+	x = new_x;
+	y = new_y;
 }

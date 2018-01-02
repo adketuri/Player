@@ -774,16 +774,6 @@ bool Game_Actor::GetAutoBattle() const {
 	return GetData().auto_battle;
 }
 
-int Game_Actor::GetBattleX() const {
-	int x = SCREEN_TARGET_WIDTH - GRID_SIDE + GetGridX() * GRID_WIDTH/GRID_SIZE - GRID_WIDTH/2 + 12;
-	return x;
-}
-
-int Game_Actor::GetBattleY() const {
-	int y = GRID_BOTTOM + GetGridY() * GRID_HEIGHT/GRID_SIZE;
-	return y;
-}
-
 const std::string& Game_Actor::GetSkillName() const {
 	return Data::actors[actor_id - 1].skill_name;
 }

@@ -96,7 +96,10 @@ protected:
 	bool battle_action_need_event_refresh = true;
 	int combo_repeat = 1;
 	bool play_reflected_anim = false;
-
+	int start_x;
+	int start_y;
+	int end_x;
+	int end_y;
 	std::unique_ptr<Window_BattleStatus> enemy_status_window;
 
 	std::vector<Game_Battler*> targets;
